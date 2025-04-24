@@ -18,6 +18,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @ToString
+@Builder
 @Document
 public class Passenger {
     @Id
