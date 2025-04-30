@@ -7,6 +7,8 @@ package edu.panchoshna.lab5.controller;/*
 */
 
 import edu.panchoshna.lab5.model.Passenger;
+import edu.panchoshna.lab5.request.PassengerCreateRequest;
+import edu.panchoshna.lab5.request.PassengerUpdateRequest;
 import edu.panchoshna.lab5.service.PassengerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -36,9 +38,21 @@ public class PassengerRestController {
         return passengerService.create(passenger);
     }
 
+    //request
+    @PostMapping("/dto")
+    public Passenger insert(@RequestBody PassengerCreateRequest request) {
+        return passengerService.create(request);
+    }
+
     @PutMapping
     public Passenger edit(@RequestBody Passenger passenger) {
         return passengerService.update(passenger);
+    }
+
+    //request
+    @PutMapping("/dto")
+    public Passenger edit(@RequestBody PassengerUpdateRequest request) {
+        return passengerService.update(request);
     }
 
     @DeleteMapping("{id}")

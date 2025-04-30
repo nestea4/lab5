@@ -8,10 +8,13 @@ package edu.panchoshna.lab5.service;/*
 
 import edu.panchoshna.lab5.model.Passenger;
 import edu.panchoshna.lab5.repository.PassengerRepository;
+import edu.panchoshna.lab5.request.PassengerCreateRequest;
+import edu.panchoshna.lab5.request.PassengerUpdateRequest;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,11 +48,50 @@ public class PassengerService {
         return passengerRepository.save(passenger);
     }
 
+    public Passenger create(PassengerCreateRequest request) {
+        Passenger passenger = mapToPassenger(request);
+        passenger.setCreateDate(LocalDateTime.now());
+        passenger.setUpdateDate(new ArrayList<LocalDateTime>());
+        return passengerRepository.save(passenger);
+    }
+
     public Passenger update(Passenger passenger) {
         return passengerRepository.save(passenger);
     }
 
+    public Passenger update(PassengerUpdateRequest request) {
+        Passenger passengerPersisted = passengerRepository.findById(request.id()).orElse(null);
+        if (passengerPersisted != null) {
+            List<LocalDateTime> updateDates = passengerPersisted.getUpdateDate();
+            updateDates.add(LocalDateTime.now());
+            Passenger passengerToUpdate =
+                    Passenger.builder()
+                            .id(request.id())
+                            .firstName(request.firstName())
+                            .lastName(request.lastName())
+                            .phoneNumber(request.phoneNumber())
+                            .email(request.email())
+                            .age(request.age())
+                            .createDate(passengerPersisted.getCreateDate())
+                            .updateDate(updateDates)
+                            .build();
+            return passengerRepository.save(passengerToUpdate);
+        }
+        return null;
+    }
+
     public void deleteById(String id) {
         passengerRepository.deleteById(id);
+    }
+
+    private Passenger mapToPassenger(PassengerCreateRequest request) {
+        Passenger passenger = new Passenger(
+                request.firstName(),
+                request.lastName(),
+                request.phoneNumber(),
+                request.email(),
+                request.age()
+        );
+        return passenger;
     }
 }

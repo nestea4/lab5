@@ -10,6 +10,8 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 @Data
@@ -28,8 +30,19 @@ public class Passenger {
     private String phoneNumber;
     private String email;
     private int age;
+    private LocalDateTime createDate;
+    private List<LocalDateTime> updateDate;
 
     public Passenger(String firstName, String lastName, String phoneNumber, String email, int age) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.age = age;
+    }
+
+    public Passenger(String id, String firstName, String lastName, String phoneNumber, String email, int age) {
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
